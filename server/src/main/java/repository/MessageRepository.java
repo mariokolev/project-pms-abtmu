@@ -23,6 +23,7 @@ public class MessageRepository {
         entityManager.getTransaction().begin();
         entityManager.persist(message);
 
+        entityManager.getTransaction().commit();
         entityManager.close();
         return message;
     }
@@ -32,6 +33,7 @@ public class MessageRepository {
         entityManager.getTransaction().begin();
         entityManager.merge(message);
 
+        entityManager.getTransaction().commit();
         entityManager.close();
         return message;
     }
