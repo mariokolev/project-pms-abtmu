@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ConversationRepository {
 
-    public List<Conversation> findALlByUserId(Long id) {
+    public List<Conversation> findAllByUserId(Long id) {
         EntityManager entityManager = EntityManagerConfig.getInstance().createEntityManager();
 
         TypedQuery<Conversation> query = entityManager.createQuery("SELECT c FROM Conversation c inner join c.users user WHERE user.id = :id order by c.id desc", Conversation.class);
