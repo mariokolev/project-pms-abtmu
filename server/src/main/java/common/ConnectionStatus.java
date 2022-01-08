@@ -1,7 +1,13 @@
 package common;
 
+
 public enum ConnectionStatus {
     PENDING,
     ACCEPTED,
-    DECLINED
+    DECLINED;
+
+    @Override
+    public String toString() {
+        return this.name().toLowerCase();
+    }
 }
