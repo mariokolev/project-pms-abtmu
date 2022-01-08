@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class MessageRepository {
+public class MessageRepository implements BaseRepository<Message> {
 
     public List<Message> findAllByConversationId(Long id) {
         EntityManager entityManager = EntityManagerConfig.getInstance().createEntityManager();
@@ -18,14 +18,9 @@ public class MessageRepository {
         return messages;
     }
 
-    public Message save(Message message) {
-        EntityManager entityManager = EntityManagerConfig.getInstance().createEntityManager();
-        entityManager.getTransaction().begin();
-        entityManager.persist(message);
-
-        entityManager.getTransaction().commit();
-        entityManager.close();
-        return message;
+    @Override
+    public Message find(Long id) {
+        return null;
     }
 
     public Message update(Message message) {

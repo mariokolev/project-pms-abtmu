@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class ConversationRepository {
+public class ConversationRepository implements BaseRepository<Conversation> {
 
     public List<Conversation> findAllByUserId(Long id) {
         EntityManager entityManager = EntityManagerConfig.getInstance().createEntityManager();
@@ -17,5 +17,10 @@ public class ConversationRepository {
 
         entityManager.close();
         return conversations;
+    }
+
+    public Conversation find(Long id) {
+        EntityManager entityManager = EntityManagerConfig.getInstance().createEntityManager();
+        return entityManager.find(Conversation.class, id);
     }
 }

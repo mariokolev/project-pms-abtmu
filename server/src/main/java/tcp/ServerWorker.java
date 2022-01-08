@@ -1,11 +1,12 @@
 package tcp;
 
-
-
-import antlr.StringUtils;
+import common.StatusCodes;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -17,6 +18,11 @@ public class ServerWorker extends Thread {
     private OutputStream outputstream;
     private HashSet<String> topicSet = new HashSet<>();
 
+    /**
+     * Identifies which user this thread handles.
+     */
+    private Long userId;
+
     public ServerWorker(Server server, Socket clientSocket) {
         this.server = server;
         this.clientSocket = clientSocket;
@@ -25,7 +31,7 @@ public class ServerWorker extends Thread {
     @Override
     public void run() {
         try {
-            handleClientSocket();
+            handle();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -33,44 +39,109 @@ public class ServerWorker extends Thread {
         }
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
     public String getLogin() {
         return login;
     }
 
-    private void handleClientSocket() throws IOException, InterruptedException {
-        // send msg
-        this.outputstream = clientSocket.getOutputStream();  // every socket has stream
+    private void handle() throws IOException, InterruptedException {
+        System.out.println("Client is being handled");
 
-        // read input
-        InputStream inputStream = clientSocket.getInputStream(); // every socket has stream
+        outputstream = clientSocket.getOutputStream();
+        outputstream.write("did you get it".getBytes());
 
+        InputStream inputStream = clientSocket.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
 
         while ((line = reader.readLine()) != null) {
-            String[] tokens = line.split(" ");
+            System.out.println("The line: " + line);
+//            line = new JSONObject()
+//                .put("endpoint", "message")
+//                .put("action", "add")
+//                .put("parameters", new JSONObject()
+//                        .put("sender_id", 1)
+//                        .put("conversation_id", 1)
+//                        .put("body", "Hello friend")
+//                        .put("is_media", false)
+//                        .put("created_at", "11/12/2021")
+//                        .put("updated_at", ""))
+//                .toString();
+//            line = new JSONObject()
+//                    .put("endpoint", "login")
+//                    .put("action", "get")
+//                    .put("parameters", new JSONObject()
+//                            .put("username", "first_user")
+//                            .put("password", "test"))
+//                    .toString();
 
-            if (tokens != null && tokens.length > 0) {
-                String cmd = tokens[0];
+//            line = new JSONObject()
+//                .put("endpoint", "conversation")
+//                .put("action", "get")
+//                .put("parameters", new JSONObject()
+//                        .put("user_id", 1))
+//                .toString();
 
-                if ("logoff".equalsIgnoreCase(line) || "quit".equalsIgnoreCase(line)) {
-                    handleLoggoff();
-                    break;
-                } else if ("login".equalsIgnoreCase(cmd)) {
-                    String[] tokensMsg = line.split(line, 3);
-                    handleLogin(outputstream, tokens);
-                } else if ("msg".equalsIgnoreCase(cmd)) {
-                    handleMessage(tokens);
-                } else if ("join".equalsIgnoreCase(cmd)) {
-                    handleJoin(tokens);
-                }
-//                String message = "You typed " + line + "\n";
-//                outputstream.write(message.getBytes());
+//            line = new JSONObject()
+//                    .put("endpoint", "message")
+//                    .put("action", "get")
+//                    .put("parameters", new JSONObject()
+//                            .put("conversation_id", 1)
+//                            .put("user_id", 1))
+//                    .toString();
+            Long[] faker = new Long[2];
+            faker[0] = 1L;
+            faker[1] = 2L;
+
+
+            line = new JSONObject()
+                    .put("endpoint", "message")
+                    .put("action", "add")
+                    .put("senderId", 1L)
+                    .put("receivers", faker)
+                    .put("parameters", new JSONObject()
+                            .put("sender_id", 2)
+                            .put("conversation_id", 1)
+                            .put("body", "Hi first_user from hardcoded json!")
+                            .put("is_media", false)
+                            .put("created_at", "11/12/2021")
+                            .put("updated_at", ""))
+                    .toString();
+
+//            "endpoint": "message",
+//                    "action": "add",
+//                    "parameters": {
+//                "sender_id": 1,
+//                        "conversation_id": 1,
+//                        "body": "Hello friend",
+//                        "is_media": false,
+//                        "created_at": "11/12/2021",
+//                        "updated_at": null
+            System.out.println("Dispatcher dispatches");
+
+            ArrayList<Long> receivers = new ArrayList<>();
+            JSONArray json = (JSONArray) new JSONObject(line).get("receivers");
+
+            for (Object id : json) {
+                System.out.println("Found receiver id: " + id);
+                receivers.add(Long.parseLong(String.valueOf(id)));
             }
 
-        }
+            Dispatcher dispatcher = new Dispatcher(line);
+            JSONObject result = dispatcher.dispatch();
 
-//        clientSocket.close();
+            if (result == null) {
+                outputstream.write(new JSONObject().put("status", StatusCodes.NOT_FOUND.getValue()).toString().getBytes());
+            } else {
+                outputstream.write(result.put("status", StatusCodes.SUCCESS.getValue()).toString().getBytes());
+            }
+        }
+    }
+
+    public void handleTest() {
 
     }
 

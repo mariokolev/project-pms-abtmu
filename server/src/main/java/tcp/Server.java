@@ -25,15 +25,16 @@ public class Server extends Thread{
             ServerSocket serverSocket = new ServerSocket(serverPort);
 
             while (true) {
-                System.out.println("Accepting connections");
                 Socket client = serverSocket.accept(); // returns client socket for every connection
-                System.out.println("Acceped connection");
-                // once we have a connection spawn worker
+                System.out.println("Socket is open");
+
+                // Assign user's id to worker.
                 ServerWorker worker = new ServerWorker(this, client);
+
                 workers.add(worker);
                 worker.start();
-
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

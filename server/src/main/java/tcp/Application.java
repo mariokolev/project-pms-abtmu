@@ -1,11 +1,15 @@
 package tcp;
 
+
+import config.EntityManagerConfig;
+
 public class Application {
 
-    public static void main (String[] args) {
-        int port = 8818;
+    private static final int PORT = 8818;
 
-        Server server = new Server(port);
+    public static void main (String[] args) {
+        EntityManagerConfig.getInstance();
+        Server server = new Server(PORT);
         server.start();
     }
 }

@@ -1,11 +1,13 @@
 package service;
 
+import dto.ConversationDTO;
 import entity.Conversation;
+import mapper.ConversationMapper;
 import repository.ConversationRepository;
 
 import java.util.List;
 
-public class ConversationService {
+public class ConversationService{
 
     private final ConversationRepository conversationRepository;
 
@@ -13,21 +15,11 @@ public class ConversationService {
         this.conversationRepository = conversationRepository;
     }
 
-//    public List<Conversation> findAllByUserId(Long id) {
-//
-//        if (id == null || id < 0) {
-//
-//        }
-//
-//        List<Conversation> conversations = null;
-//
-//
-//            conversations = conversationRepository.findAllByUserId(id);
-//
-//
-//    }
-//
-//    public Conversation save(Conversation conversation) {
-//        conversation.getUsers().size()
-//    }
+    public List<ConversationDTO> findAllByUserId(Long id) {
+        return ConversationMapper.convertEntityToDto(conversationRepository.findAllByUserId(id));
+    }
+
+    public Conversation find(Long id) {
+        return conversationRepository.find(id);
+    }
 }

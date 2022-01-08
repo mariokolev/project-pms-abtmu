@@ -6,7 +6,7 @@ import javax.persistence.Persistence;
 public class EntityManagerConfig {
 	private static final EntityManagerFactory entityManagerFactory;
 	
-	static {		
+	static {
 		  entityManagerFactory = Persistence.createEntityManagerFactory("chat_application");
 		}
 	
