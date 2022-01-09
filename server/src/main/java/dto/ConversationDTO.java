@@ -1,11 +1,18 @@
 package dto;
 
+
+import java.util.HashMap;
 import java.util.List;
 
 public class ConversationDTO {
     private Long id;
     private List<UserDTO> users;
 
+    public ConversationDTO() {}
+
+    public ConversationDTO(HashMap<String, Object> parameters) {
+//        users = JSONStringer.valueToString(parameters.get("users"));
+    }
     public Long getId() {
         return id;
     }
