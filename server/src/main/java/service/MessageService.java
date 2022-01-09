@@ -35,4 +35,15 @@ public class MessageService {
 
         return MessageMapper.convertEntityToDto(messageRepository.save(message));
     }
+
+    public MessageDTO update(MessageDTO messageDTO) {
+        User user = userService.find(messageDTO.getSenderId());
+        Conversation conversation = conversationService.find(messageDTO.getConversationId());
+        Message message = MessageMapper.convertDtoToEntity(messageDTO);
+
+        message.setSender(user);
+        message.setConversation(conversation);
+
+        return MessageMapper.convertEntityToDto(messageRepository.update(message));
+    }
 }
