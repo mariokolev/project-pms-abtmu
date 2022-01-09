@@ -30,6 +30,14 @@ public class UserRepository implements BaseRepository<User> {
 
     public User find(Long id) {
         EntityManager entityManager = EntityManagerConfig.getInstance().createEntityManager();
-        return entityManager.find(User.class, id);
+        User user = null;
+
+        try {
+            user = entityManager.find(User.class, id);
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException(e.toString());
+        }
+
+        return user;
     }
 }
