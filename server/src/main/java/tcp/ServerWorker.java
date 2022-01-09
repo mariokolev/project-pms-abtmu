@@ -1,7 +1,9 @@
 package tcp;
 
 import common.StatusCodes;
+import exception.BadRequestException;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
@@ -51,10 +53,17 @@ public class ServerWorker extends Thread {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
 
+        ArrayList<Long> faker = new ArrayList<>();
+        faker.add(1L);
+
         while ((line = reader.readLine()) != null) {
 
             if (userId == null) {
-                userId = Long.parseLong(JSONStringer.valueToString(new JSONObject(line).get("senderId")));
+                try {
+                    userId = Long.parseLong(JSONStringer.valueToString(new JSONObject(line).get("senderId")));
+                } catch (JSONException e) {
+                    logger.info(e.toString());
+                }
                 logger.info(String.format("Thread handles user with id[%d] ", userId));
             }
 
@@ -68,12 +77,18 @@ public class ServerWorker extends Thread {
 
             logger.info(String.format("Receivers: %s", receivers.toString()));
             Dispatcher dispatcher = new Dispatcher(line);
-            JSONObject result = dispatcher.dispatch();
-            logger.info(String.format("Dispatcher result: %s", result.toString()));
+            JSONObject result = null;
+
+            try {
+                result = dispatcher.dispatch();
+            } catch (BadRequestException e) {
+                logger.info(e.toString());
+            }
 
             if (result == null) {
                 handleReceivers(receivers, String.format(new JSONObject().put("status", StatusCodes.NOT_FOUND.getValue()).toString() + "\n").getBytes());
             } else {
+                logger.info(String.format("Dispatcher result: %s", result.toString()));
                 handleReceivers(receivers, String.format(result.put("status", StatusCodes.SUCCESS.getValue()).toString() + "\n").getBytes());
             }
         }

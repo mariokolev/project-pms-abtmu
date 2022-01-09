@@ -2,6 +2,8 @@ package tcp;
 
 import dto.ConversationDTO;
 import dto.MessageDTO;
+import exception.BadRequestException;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 import repository.ConnectionRepository;
@@ -20,7 +22,7 @@ public class Dispatcher {
     private final String action;
     private final HashMap<String, Object> parameters;
     // Id of user making request
-    private final Long senderId;
+    private Long senderId;
     private final JSONConverter jsonConverter;
     private final Logger logger = Logger.getLogger(Dispatcher.class.getName());
 
@@ -28,13 +30,18 @@ public class Dispatcher {
         JSONObject obj = new JSONObject(stream);
         this.endpoint = obj.getString("endpoint");
         this.action = obj.getString("action");    // get, add, update
-        this.senderId = obj.getLong("senderId");
+
+        try {
+            this.senderId = obj.getLong("senderId");
+        } catch (JSONException e) {
+            logger.info(e.toString());
+        }
+
         jsonConverter = new JSONConverter();
         this.parameters = jsonConverter.turnJSONObjectToHashMap(obj.getJSONObject("parameters")); // connection, message, user
-
     }
 
-    public JSONObject dispatch() {
+    public JSONObject dispatch() throws BadRequestException {
 
         logger.info(String.format("[endpoint]: %s", endpoint));
         logger.info(String.format("[action]: %s", action));
