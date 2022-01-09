@@ -48,6 +48,7 @@ public class ServerWorker extends Thread {
     }
 
     private void handle() throws IOException, InterruptedException {
+        String errorMessage = null;
         outputstream = clientSocket.getOutputStream();
         InputStream inputStream = clientSocket.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -68,15 +69,29 @@ public class ServerWorker extends Thread {
             }
 
             ArrayList<Long> receivers = new ArrayList<>();
-            JSONArray json = (JSONArray) new JSONObject(line).get("receivers");
+            JSONArray json = null;
 
-            for (Object id : json) {
-                logger.info(String.format("parsing long, %s", String.valueOf(id)));
-                receivers.add(Long.parseLong(String.valueOf(id)));
+            try {
+                json = (JSONArray) new JSONObject(line).get("receivers");
+
+                for (Object id : json) {
+                    logger.info(String.format("parsing long, %s", String.valueOf(id)));
+                    receivers.add(Long.parseLong(String.valueOf(id)));
+                }
+
+                logger.info(String.format("Receivers: %s", receivers.toString()));
+            } catch (JSONException e) {
+                errorMessage = e.getMessage();
             }
 
-            logger.info(String.format("Receivers: %s", receivers.toString()));
-            Dispatcher dispatcher = new Dispatcher(line);
+            Dispatcher dispatcher = null;
+            try {
+               dispatcher = new Dispatcher(line);
+            } catch (JSONException e) {
+                logger.info(e.getMessage());
+                continue;
+            }
+
             JSONObject result = null;
 
             try {
@@ -89,7 +104,7 @@ public class ServerWorker extends Thread {
                 handleReceivers(receivers, String.format(new JSONObject().put("status", StatusCodes.NOT_FOUND.getValue()).toString() + "\n").getBytes());
             } else {
                 logger.info(String.format("Dispatcher result: %s", result.toString()));
-                handleReceivers(receivers, String.format(result.put("status", StatusCodes.SUCCESS.getValue()).toString() + "\n").getBytes());
+                handleReceivers(receivers, String.format(result.put("status", StatusCodes.SUCCESS.getValue()).put("errorMessage", errorMessage).toString() + "\n").getBytes());
             }
         }
     }
