@@ -3,11 +3,7 @@ package my.android.client.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.Random;
 
 import my.android.client.model.Conversation;
 import my.android.client.repository.ConversationRepository;
