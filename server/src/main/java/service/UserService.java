@@ -1,5 +1,6 @@
 package service;
 
+import common.Messages;
 import entity.User;
 import exception.BadRequestException;
 import repository.UserRepository;
@@ -17,6 +18,12 @@ public class UserService{
     }
 
     public User find(Long id) {
-        return userRepository.find(id);
+
+        User user = userRepository.find(id);
+        if (user == null) {
+            throw new BadRequestException(Messages.USER_NOT_FOUND, id);
+        }
+
+        return user;
     }
 }

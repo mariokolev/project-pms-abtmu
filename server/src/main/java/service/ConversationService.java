@@ -2,6 +2,7 @@ package service;
 
 import dto.ConversationDTO;
 import entity.Conversation;
+import exception.BadRequestException;
 import mapper.ConversationMapper;
 import repository.ConversationRepository;
 
@@ -16,7 +17,15 @@ public class ConversationService{
     }
 
     public List<ConversationDTO> findAllByUserId(Long id) {
-        return ConversationMapper.convertEntityToDto(conversationRepository.findAllByUserId(id));
+        List<Conversation> conversations = null;
+
+        try {
+            conversations = conversationRepository.findAllByUserId(id);
+        } catch (BadRequestException e) {
+            throw e;
+        }
+
+        return ConversationMapper.convertEntityToDto(conversations);
     }
 
     public Conversation find(Long id) {
