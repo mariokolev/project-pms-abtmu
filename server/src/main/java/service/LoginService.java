@@ -17,16 +17,18 @@ public class LoginService {
     }
 
     public UserDTO login(HashMap<String, Object> parameters) {
-        User user = userService.findByUserName((String) parameters.get("username"));
+        User user = null;
 
-        if (user == null) {
-            throw new BadRequestException("Wrong credentials");
+        try {
+            user = userService.findByUserName((String) parameters.get("username"));
+        } catch (BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
         }
 
         if (PasswordEncoder.matchPassword((String) parameters.get("password"), user.getPassword())) {
             return UserMapper.convertEntityToDto(user);
         } else {
-            throw new BadRequestException("Wrong credentials");
+            throw new BadRequestException("Wrong credentials, try again.");
         }
     }
 }

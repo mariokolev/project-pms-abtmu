@@ -4,6 +4,7 @@ import dto.MessageDTO;
 import entity.Conversation;
 import entity.Message;
 import entity.User;
+import exception.BadRequestException;
 import mapper.MessageMapper;
 import repository.MessageRepository;
 
@@ -26,8 +27,16 @@ public class MessageService {
     }
 
     public MessageDTO save(MessageDTO messageDTO) {
-        User user = userService.find(messageDTO.getSenderId());
-        Conversation conversation = conversationService.find(messageDTO.getConversationId());
+        User user = null;
+        Conversation conversation = null;
+
+        try {
+            user = userService.find(messageDTO.getSenderId());
+            conversation = conversationService.find(messageDTO.getConversationId());
+        } catch (BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
+        }
+
         Message message = MessageMapper.convertDtoToEntity(messageDTO);
 
         message.setSender(user);
@@ -37,13 +46,21 @@ public class MessageService {
     }
 
     public MessageDTO update(MessageDTO messageDTO) {
-        User user = userService.find(messageDTO.getSenderId());
-        Conversation conversation = conversationService.find(messageDTO.getConversationId());
-        Message message = MessageMapper.convertDtoToEntity(messageDTO);
+        User user = null;
+        Conversation conversation = null;
+        Message message = null;
 
-        message.setSender(user);
-        message.setConversation(conversation);
+        try {
+            user = userService.find(messageDTO.getSenderId());
+            conversation = conversationService.find(messageDTO.getConversationId());
+            message = MessageMapper.convertDtoToEntity(messageDTO);
+            message.setSender(user);
+            message.setConversation(conversation);
+            message = messageRepository.update(message);
+        } catch (BadRequestException e) {
+            throw e;
+        }
 
-        return MessageMapper.convertEntityToDto(messageRepository.update(message));
+        return MessageMapper.convertEntityToDto(message);
     }
 }
