@@ -21,8 +21,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText password;
     private Button btnLogin;
     private AuthViewModel authViewModel;
-    private TCPClient tcpClient;
-    private static final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

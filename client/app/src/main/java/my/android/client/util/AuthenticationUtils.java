@@ -15,12 +15,17 @@ public class AuthenticationUtils {
 
     public static void setUser(Context context, User user) {
         Editor editor = getSharedPreference(context).edit();
-        editor.putString("PREF_USERNAME", user.getUsername());
+        editor.putLong("sender_id", user.getId());
+        editor.putString("username", user.getUsername());
         editor.apply();
     }
 
     public static String getUsername(Context context) {
-        return getSharedPreference(context).getString("PREF_USERNAME", null);
+        return getSharedPreference(context).getString("username", null);
+    }
+
+    public static Long getUserId(Context context) {
+        return getSharedPreference(context).getLong("sender_id", 0L);
     }
 
     public static void unsetUser(Context context) {
@@ -32,4 +37,5 @@ public class AuthenticationUtils {
     public static Boolean isLoggedIn(Context context) {
         return getUsername(context) != null;
     }
+
 }

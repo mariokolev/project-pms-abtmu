@@ -44,7 +44,6 @@ public class TCPClient {
             InetAddress serverAddr = InetAddress.getByName(SERVER_IP);
             Log.i("TCP ", "Client Connecting...");
             socket = new Socket(serverAddr, SERVER_PORT);
-            sendMessage("Hello Server!\n");
         } catch (UnknownHostException e) {
             Log.e("HOST ", "unknown host ", e);
         } catch (IOException e) {

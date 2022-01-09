@@ -3,6 +3,7 @@ package my.android.client.viewmodel;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModel;
@@ -63,14 +64,12 @@ public class AuthViewModel extends ViewModel {
 
         @Override
         protected User doInBackground(String... message) {
-           loggedUser = new User(username, password);
             try {
-                System.out.println(userRepository.login(username, password));
+                loggedUser = userRepository.login(username, password);
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e("Login ", "something went wrong", e);
             }
             return loggedUser;
         }
-
     }
 }

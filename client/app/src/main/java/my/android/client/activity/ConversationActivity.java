@@ -6,6 +6,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONException;
+
+import java.util.concurrent.ExecutionException;
+
 import my.android.client.R;
 import my.android.client.adapter.ConversationAdapter;
 import my.android.client.viewmodel.ConversationViewModel;
@@ -28,8 +32,13 @@ public class ConversationActivity extends BaseActivity {
         recyclerView.setAdapter(adapter);
 
         conversationViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(ConversationViewModel.class);
-        conversationViewModel.findAllConversations().observe(this,
-                adapter::setConversations);
+        conversationViewModel.setContext(getApplicationContext());
+        try {
+            conversationViewModel.findAllConversations().observe(this,
+                    adapter::setConversations);
+        } catch (JSONException | InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
 
     }
 }

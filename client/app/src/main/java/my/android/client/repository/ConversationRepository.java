@@ -1,32 +1,37 @@
 package my.android.client.repository;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import my.android.client.model.Conversation;
-import my.android.client.model.User;
+import my.android.client.tcp.TCPClient;
+import my.android.client.util.JSONConverter;
 
 public class ConversationRepository {
 
-    public List<Conversation> findAll() {
-        List<Conversation> conversations = new ArrayList<>();
-        Conversation conversation = new Conversation();
-        conversation.setId(1L);
-        List<User> users = new ArrayList<>();
-        users.add(new User("user1", "user1"));
-        users.add(new User("user2", "user1"));
-        conversation.setUsers(users);
+    private JSONConverter jsonConverter = new JSONConverter();
 
-        Conversation conversation1 = new Conversation();
-        conversation.setId(2L);
-        List<User> users1 = new ArrayList<>();
-        users1.add(new User("user3", "user3"));
-        users1.add(new User("user1", "user1"));
-        conversation1.setUsers(users1);
+    public List<Conversation> findAllByUserId(Long id) throws JSONException {
+        TCPClient tcpClient = TCPClient.getInstance();
+        JSONObject request = new JSONObject();
+        List<Long> receivers = new ArrayList<>();
+        receivers.add(id);
+        request
+                .put("endpoint", "conversation")
+                .put("action", "get")
+                .put("senderId", id)
+                .put("receivers", new JSONArray(receivers))
+                .put("parameters", new JSONObject()
+                        .put("userId", id)
+                );
 
-        conversations.add(conversation);
-        conversations.add(conversation1);
+        System.out.println(request.toString());
+        tcpClient.sendMessage(request.toString() + "\n");
 
-        return conversations;
+        return jsonConverter.convertJsonToConversations(new JSONObject(tcpClient.receive()));
     }
 }
