@@ -21,22 +21,28 @@ public class JSONConverter {
 
     public List<Conversation> convertJsonToConversations(JSONObject json) throws JSONException {
         List<Conversation> conversations  = new ArrayList<>();
-        JSONArray jsonArray = json.getJSONArray("conversations");
+        JSONArray conversationsJSONArray = json.getJSONArray("conversations");
 
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject conversationsJson = jsonArray.getJSONObject(i);
+        for (int jsonConversatino = 0; jsonConversatino < conversationsJSONArray.length(); jsonConversatino++) {
+            JSONObject conversationsJson = conversationsJSONArray.getJSONObject(jsonConversatino);
             Conversation conversation = new Conversation();
             conversation.setId(conversationsJson.getLong("id"));
 
             JSONArray jsonUsers = new JSONArray(conversationsJson.getString("users"));
 
             List<User> users = new ArrayList<>();
-            for (int j = 0; j < jsonUsers.length(); j++) {
-                User user = convertJsonToUser(jsonUsers.getJSONObject(i));
+            for (int jsonUser = 0; jsonUser < jsonUsers.length(); jsonUser++) {
+                User user = convertJsonToUser(jsonUsers.getJSONObject(jsonUser));
                 users.add(user);
             }
             conversation.setUsers(users);
             conversations.add(conversation);
+        }
+
+        for (int i = 0; i < conversations.size(); i++) {
+            for (int j = 0; j < conversations.get(i).getUsers().size(); j++) {
+                System.out.println(conversations.get(i).getUsers().get(j).getUsername() );
+            }
         }
         return conversations;
     }

@@ -29,6 +29,7 @@ public class ConversationActivity extends BaseActivity {
         recyclerView.setHasFixedSize(true);
 
         ConversationAdapter adapter = new ConversationAdapter();
+        adapter.setContext(getApplicationContext());
         recyclerView.setAdapter(adapter);
 
         conversationViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(ConversationViewModel.class);
@@ -36,7 +37,7 @@ public class ConversationActivity extends BaseActivity {
         try {
             conversationViewModel.findAllConversations().observe(this,
                     adapter::setConversations);
-        } catch (JSONException | InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
