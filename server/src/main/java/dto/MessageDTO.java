@@ -1,6 +1,6 @@
 package dto;
 
-import org.json.JSONObject;
+
 import org.json.JSONStringer;
 
 import java.time.LocalDateTime;
@@ -15,13 +15,14 @@ public class MessageDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public MessageDTO() {}
+    public MessageDTO() {
+    }
 
     public MessageDTO(HashMap<String, Object> parameters) {
-        senderId = Long.parseLong(JSONStringer.valueToString(parameters.get("sender_id")));
+        senderId = Long.parseLong(JSONStringer.valueToString(parameters.get("senderId")));
         messageBody = JSONStringer.valueToString(parameters.get("body"));
-        isMedia = (Boolean) parameters.get("is_media");
-        conversationId = Long.parseLong(JSONStringer.valueToString(parameters.get("conversation_id")));
+        isMedia = (Boolean) parameters.get("isMedia");
+        conversationId = Long.parseLong(JSONStringer.valueToString(parameters.get("conversationId")));
     }
 
     public Long getId() {

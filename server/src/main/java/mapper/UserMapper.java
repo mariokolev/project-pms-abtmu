@@ -1,7 +1,12 @@
 package mapper;
 
+import dto.ConversationDTO;
 import dto.UserDTO;
+import entity.Conversation;
 import entity.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserMapper {
 
@@ -20,5 +25,15 @@ public class UserMapper {
         user.setUsername(userDTO.getUsername());
 
         return user;
+    }
+
+    public static List<UserDTO> convertEntityToDto(List<User> users) {
+        List<UserDTO> userDTOs = new ArrayList<>();
+
+        for (User user : users) {
+            userDTOs.add(convertEntityToDto(user));
+        }
+
+        return userDTOs;
     }
 }

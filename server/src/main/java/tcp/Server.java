@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Server extends Thread{
     private final int serverPort;
@@ -19,18 +20,19 @@ public class Server extends Thread{
         return workers;
     }
 
+    private Logger logger = Logger.getLogger(Server.class.getName());
+
     @Override
     public void run() {
         try {
             ServerSocket serverSocket = new ServerSocket(serverPort);
 
             while (true) {
-                Socket client = serverSocket.accept(); // returns client socket for every connection
-                System.out.println("Socket is open");
+                logger.info("Server is accepting connections.");
+                Socket client = serverSocket.accept();
 
-                // Assign user's id to worker.
+                logger.info("Created thread for current connection.");
                 ServerWorker worker = new ServerWorker(this, client);
-
                 workers.add(worker);
                 worker.start();
             }
