@@ -46,6 +46,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
         holder.getCardView().setOnClickListener(view -> {
             Intent i = new Intent(context, ChatActivity.class);
+            i.putExtra("conversationId", currentConversation.getId());
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
         });
