@@ -54,9 +54,6 @@ public class ServerWorker extends Thread {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
 
-        ArrayList<Long> faker = new ArrayList<>();
-        faker.add(1L);
-
         while ((line = reader.readLine()) != null) {
 
             if (userId == null) {
@@ -64,6 +61,7 @@ public class ServerWorker extends Thread {
                     userId = Long.parseLong(JSONStringer.valueToString(new JSONObject(line).get("senderId")));
                 } catch (JSONException e) {
                     logger.info(e.toString());
+
                 }
                 logger.info(String.format("Thread handles user with id[%d] ", userId));
             }
