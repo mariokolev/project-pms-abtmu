@@ -20,7 +20,7 @@ public class MessageDTO {
 
     public MessageDTO(HashMap<String, Object> parameters) {
         senderId = Long.parseLong(JSONStringer.valueToString(parameters.get("senderId")));
-        messageBody = JSONStringer.valueToString(parameters.get("body"));
+        messageBody = JSONStringer.valueToString(parameters.get("messageBody"));
         isMedia = (Boolean) parameters.get("isMedia");
         conversationId = Long.parseLong(JSONStringer.valueToString(parameters.get("conversationId")));
     }

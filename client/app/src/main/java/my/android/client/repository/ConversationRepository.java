@@ -19,6 +19,8 @@ public class ConversationRepository {
         TCPClient tcpClient = TCPClient.getInstance();
         JSONObject request = new JSONObject();
         List<Long> receivers = new ArrayList<>();
+
+        System.out.println("CONVERSATION RECEIVER ID: " + id);
         receivers.add(id);
         request
                 .put("endpoint", "conversation")

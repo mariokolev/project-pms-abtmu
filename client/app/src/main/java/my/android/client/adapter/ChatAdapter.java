@@ -14,10 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import my.android.client.R;
+import my.android.client.model.Message;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
 
-    private List<String> messages = new ArrayList<>();
+    private List<Message> messages = new ArrayList<>();
     private Context context;
 
     @NonNull
@@ -30,8 +31,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ChatHolder holder, int position) {
-        String message = messages.get(position);
-        holder.messageText.setText("test");
+        Message message = messages.get(position);
+        holder.messageText.setText(message.getBody());
     }
 
     @Override
@@ -39,8 +40,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatHolder> {
         return messages.size();
     }
 
-    public void setMessages(List<String> messages) {
+    public void setMessages(List<Message> messages) {
         this.messages = messages;
+        notifyDataSetChanged();
+    }
+
+    public void addMessage(Message message) {
+        this.messages.add(message);
+//        notifyItemInserted(messages.size() -1);
+        System.out.println(message);
         notifyDataSetChanged();
     }
 

@@ -11,7 +11,7 @@ public class MessageRepository implements BaseRepository<Message> {
 
     public List<Message> findAllByConversationId(Long id) {
         EntityManager entityManager = EntityManagerConfig.getInstance().createEntityManager();
-        TypedQuery<Message> query = entityManager.createQuery("SELECT m FROM Message m WHERE m.conversation.id = :id order by id DESC", Message.class);
+        TypedQuery<Message> query = entityManager.createQuery("SELECT m FROM Message m WHERE m.conversation.id = :id", Message.class);
         List<Message> messages = query.setParameter("id", id).getResultList();
 
         entityManager.close();

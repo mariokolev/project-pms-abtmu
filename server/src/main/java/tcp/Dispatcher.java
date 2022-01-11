@@ -32,6 +32,7 @@ public class Dispatcher {
             this.endpoint = obj.getString("endpoint");
             this.action = obj.getString("action");
             this.senderId = obj.getLong("senderId");
+            logger.info(String.format("Retrieved senderId: %d", senderId));
             jsonConverter = new JSONConverter();
             this.parameters = jsonConverter.turnJSONObjectToHashMap(obj.getJSONObject("parameters"));
         } catch (JSONException e) {

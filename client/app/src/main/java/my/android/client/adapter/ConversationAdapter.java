@@ -37,16 +37,20 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     public void onBindViewHolder(@NonNull ConversationHolder holder, int position) {
         Conversation currentConversation = conversations.get(position);
         String username = "";
+        Long receiverId = 0L;
         for (User user : currentConversation.getUsers()) {
             if (!user.getId().equals(AuthenticationUtils.getUserId(context))) {
+                receiverId = user.getId();
                 username = user.getUsername();
             }
         }
         holder.conversationName.setText(username);
 
+        Long finalReceiverId = receiverId;
         holder.getCardView().setOnClickListener(view -> {
             Intent i = new Intent(context, ChatActivity.class);
             i.putExtra("conversationId", currentConversation.getId());
+            i.putExtra("receiverId", finalReceiverId);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
         });
