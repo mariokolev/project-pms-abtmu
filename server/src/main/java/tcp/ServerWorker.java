@@ -52,12 +52,14 @@ public class ServerWorker extends Thread {
         InputStream inputStream = clientSocket.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
+
         while ((line = reader.readLine()) != null) {
             if (userId == null) {
                 try {
                     userId = Long.parseLong(JSONStringer.valueToString(new JSONObject(line).get("senderId")));
                 } catch (JSONException e) {
                     logger.info(e.toString());
+
                 }
                 logger.info(String.format("Thread handles user with id[%d] ", userId));
             }
