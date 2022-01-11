@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginTop="100dp">
+    <item
+        android:id="@+id/chats"
+        android:layout_marginTop="100dp"
+        android:title="@string/menuChats" />
+    <item
+        android:id="@+id/friends"
+        android:layout_marginTop="100dp"
+        android:title="@string/menuFriends" />
+    <item
+        android:id="@+id/findConnections"
+        android:layout_marginTop="100dp"
+        android:title="@string/menuFind" />
+    <item
+        android:id="@+id/logout"
+        android:layout_marginTop="100dp"
+        android:title="@string/menuLogout" />
+</menu>

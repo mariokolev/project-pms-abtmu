@@ -1,29 +1,17 @@
-package dto;
-
-
-import org.json.JSONStringer;
+package my.android.client.model;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 
-public class MessageDTO {
+public class Message {
+
     private Long id;
-    private Long senderId;
-    private String messageBody;
-    private Boolean isMedia;
     private Long conversationId;
+    private Long senderId;
+    private String body;
+    private Boolean isMedia;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public MessageDTO() {
-    }
-
-    public MessageDTO(HashMap<String, Object> parameters) {
-        senderId = Long.parseLong(JSONStringer.valueToString(parameters.get("senderId")));
-        messageBody = JSONStringer.valueToString(parameters.get("messageBody"));
-        isMedia = (Boolean) parameters.get("isMedia");
-        conversationId = Long.parseLong(JSONStringer.valueToString(parameters.get("conversationId")));
-    }
 
     public Long getId() {
         return id;
@@ -31,6 +19,14 @@ public class MessageDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getConversationId() {
+        return conversationId;
+    }
+
+    public void setConversationId(Long conversationId) {
+        this.conversationId = conversationId;
     }
 
     public Long getSenderId() {
@@ -41,12 +37,12 @@ public class MessageDTO {
         this.senderId = senderId;
     }
 
-    public String getMessageBody() {
-        return messageBody;
+    public String getBody() {
+        return body;
     }
 
-    public void setMessageBody(String messageBody) {
-        this.messageBody = messageBody;
+    public void setBody(String body) {
+        this.body = body;
     }
 
     public Boolean getMedia() {
@@ -55,14 +51,6 @@ public class MessageDTO {
 
     public void setMedia(Boolean media) {
         isMedia = media;
-    }
-
-    public Long getConversationId() {
-        return conversationId;
-    }
-
-    public void setConversationId(Long conversationId) {
-        this.conversationId = conversationId;
     }
 
     public LocalDateTime getCreatedAt() {

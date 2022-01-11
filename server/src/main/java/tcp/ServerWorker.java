@@ -19,7 +19,6 @@ public class ServerWorker extends Thread {
     private final Socket clientSocket;
     private final Server server;
     private OutputStream outputstream;
-    private HashSet<String> topicSet = new HashSet<>();
     private Logger logger = Logger.getLogger(ServerWorker.class.getName());
 
     /**
@@ -55,7 +54,6 @@ public class ServerWorker extends Thread {
         String line;
 
         while ((line = reader.readLine()) != null) {
-
             if (userId == null) {
                 try {
                     userId = Long.parseLong(JSONStringer.valueToString(new JSONObject(line).get("senderId")));
@@ -65,7 +63,6 @@ public class ServerWorker extends Thread {
                 }
                 logger.info(String.format("Thread handles user with id[%d] ", userId));
             }
-
             ArrayList<Long> receivers = new ArrayList<>();
             JSONArray json = null;
 
@@ -73,7 +70,7 @@ public class ServerWorker extends Thread {
                 json = (JSONArray) new JSONObject(line).get("receivers");
 
                 for (Object id : json) {
-                    logger.info(String.format("parsing long, %s", String.valueOf(id)));
+                    logger.info(String.format("Adding client id:, %s", String.valueOf(id)));
                     receivers.add(Long.parseLong(String.valueOf(id)));
                 }
 
@@ -102,7 +99,8 @@ public class ServerWorker extends Thread {
                 handleReceivers(receivers, String.format(new JSONObject().put("status", StatusCodes.NOT_FOUND.getValue()).toString() + "\n").getBytes());
             } else {
                 logger.info(String.format("Dispatcher result: %s", result.toString()));
-                handleReceivers(receivers, String.format(result.put("status", StatusCodes.SUCCESS.getValue()).put("errorMessage", errorMessage).toString() + "\n").getBytes());
+//                handleReceivers(receivers, String.format(result.put("status", StatusCodes.SUCCESS.getValue()).put("errorMessage", errorMessage).toString() + "\n").getBytes());
+                handleReceivers(receivers, String.format(result.put("status", StatusCodes.SUCCESS.getValue()).toString() + "\n").getBytes());
             }
         }
     }
@@ -118,6 +116,7 @@ public class ServerWorker extends Thread {
 
     private void send(byte[] response) throws IOException {
         outputstream.write(response);
+        outputstream.flush();
     }
 
     // LOG OUT remove worker from list

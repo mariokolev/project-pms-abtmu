@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">client</string>
+    <string name="username">потребителско име</string>
+    <string name="menuChats">чатове</string>
+    <string name="menuFriends">приятели</string>
+    <string name="menuFind">търси</string>
+    <string name="menuLogout">Излез</string>
+    <string name="textPassword">парола</string>
+    <string name="btnLogin">Влизане</string>
+    <string name="textUsername">потребителско име</string>
 </resources>
