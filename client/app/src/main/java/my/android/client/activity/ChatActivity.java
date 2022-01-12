@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -14,6 +15,7 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import my.android.client.R;
 import my.android.client.adapter.ChatAdapter;
@@ -41,18 +43,29 @@ public class ChatActivity extends BaseActivity {
         btnSend = findViewById(R.id.btnSend);
         messageToSend = findViewById(R.id.messageToSend);
 
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setStackFromEnd(true);
         recyclerView = findViewById(R.id.chatRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(layoutManager);
+
         recyclerView.setHasFixedSize(true);
         adapter = new ChatAdapter();
+        adapter.setContext(getApplicationContext());
         recyclerView.setAdapter(adapter);
 
         MessageTask messageTask = new MessageTask(getApplicationContext(), receiverId, conversationId);
-        messageTask.execute();
+        try {
+            messageTask.execute().get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
 
         btnSend.setOnClickListener(view -> {
             SendMessageTask sendMessageTask = new SendMessageTask(getApplicationContext(), receiverId, conversationId);
             sendMessageTask.execute();
+            messageToSend.setText("");
+            InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(messageToSend.getApplicationWindowToken(),0);
         });
     }
 
@@ -74,6 +87,7 @@ public class ChatActivity extends BaseActivity {
             try {
                 messages = messageRepository.findAllByConversationId(AuthenticationUtils.getUserId(context), receiverId, conversationId);
                 adapter.setMessages(messages);
+
             } catch (JSONException e) {
                 Log.e("Get messages ", e.getMessage(), e);
             }
@@ -99,6 +113,7 @@ public class ChatActivity extends BaseActivity {
             super.onPostExecute(message);
             System.out.println("Executing on post: " + message.getBody());
             adapter.addMessage(message);
+            recyclerView.smoothScrollToPosition(recyclerView.getBottom());
         }
 
         @Override
@@ -112,6 +127,7 @@ public class ChatActivity extends BaseActivity {
                 System.out.println("Repository.save called!!");
                 message = messageRepository.save(message, receiverId);
                 System.out.println("SendMessageTask received: " + message.toString());
+
 
                 return message;
             } catch (JSONException e) {

@@ -65,7 +65,7 @@ public class JSONConverter {
                 message.setBody(messageJson.getString("messageBody"));
                 message.setMedia(messageJson.getBoolean("media"));
                 message.setConversationId(messageJson.getLong("conversationId"));
-
+                message.setSenderId(messageJson.getLong("senderId"));
                 messages.add(message);
             }
         } catch (JSONException e) {
@@ -82,7 +82,7 @@ public class JSONConverter {
                 message.setMedia(json.getBoolean("media"));
                 message.setConversationId(json.getLong("conversationId"));
                 message.setId(json.getLong("id"));
-                message.setSenderId(json.getLong("id"));
+                message.setSenderId(json.getLong("senderId"));
         } catch (JSONException e) {
             Log.e("Get messages", e.getMessage(), e);
         }

@@ -10,48 +10,51 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-56dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chatRecyclerView"
-            android:layout_width="411dp"
-            android:layout_height="603dp"
+            android:layout_width="403dp"
+            android:layout_height="562dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.289"
+            app:layout_constraintVertical_bias="0.035"
             tools:layout_editor_absoluteX="0dp" />
 
-        <EditText
-            android:id="@+id/messageToSend"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:ems="10"
-            android:hint="Enter your message"
-            android:inputType="textPersonName"
-            android:text=""
-            android:textAlignment="center"
-            android:textColor="#000"
+        <LinearLayout
+            android:id="@+id/chatLinearLayout"
+            android:layout_width="410dp"
+            android:layout_height="125dp"
+            android:background="@color/background"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.262"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.953" />
+            app:layout_constraintVertical_bias="1.0">
 
-        <Button
-            android:id="@+id/btnSend"
-            android:layout_width="101dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="16dp"
-            android:background="@color/colorDark"
-            android:gravity="center"
-            android:text="Изпрати"
-            android:textColor="@color/background"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.957" />
+            <EditText
+                android:id="@+id/messageToSend"
+                android:layout_width="299dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="10dp"
+                android:ems="10"
+                android:hint="Enter your message"
+                android:inputType="textPersonName"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="#000" />
+
+            <Button
+                android:id="@+id/btnSend"
+                android:layout_width="101dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/colorDark"
+                android:gravity="center"
+                android:text="Изпрати"
+                android:textColor="@color/background"
+                android:textSize="12sp" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
